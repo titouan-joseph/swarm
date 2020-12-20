@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:v2.2
+    command:
+      # Docker config
+      - "--providers.docker=true"
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik-public"
+      # Nas config
+      - "--providers.file=true"
+      - "--providers.file.directory=/services"
+      - "--providers.file.watch=true"
+      # Entrypoint
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      # SSL
+      - "--certificatesresolvers.le.acme.email=root@revol.site"
+      - "--certificatesresolvers.le.acme.storage=/acme.json"
+      - "--certificatesResolvers.le.acme.tlsChallenge=true"
+      - "--certificatesResolvers.le.acme.httpChallenge=true"
+      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+      # HTTP -> HTTPS
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      # Enable Dashboard
+      - "--api.dashboard=true"
+      # Logs
+      - "--log.level=DEBUG"
+      - "--log.filepath=/log.log"
+      # Access Logs
+      - "--accesslog=true"
+      - "--accesslog.filepath=/accesslog.log"
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./services:/services
+      - /certificats/acme.json:/acme.json
+      - ./accesslog.log:/accesslog.log
+      - ./log.log:/log.log
+      - ./passwd:/passwd
+    networks:
+      - traefik-public
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy :
+        condition : on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=traefik-public"
+        - "traefik.http.routers.traefik.tls=true"
+        - "traefik.http.services.traefik.loadbalancer.server.port=888" # required by swarm but not used.
+        - "traefik.http.routers.traefik.rule=Host(`traefik.cluster.revol.site`)"
+        - "traefik.http.routers.traefik.tls.certresolver=le"
+        - "traefik.http.routers.traefik.entrypoints=websecure"
+        - "traefik.http.routers.traefik.service=api@internal"
+        - "traefik.http.routers.traefik.middlewares=traefik-auth"
+        - "traefik.http.middlewares.traefik-auth.basicauth.usersfile=/passwd"
+    
+networks:
+  traefik-public:
+    external: true

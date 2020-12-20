@@ -1,0 +1,24 @@
+http :
+  services :
+    website24 :
+      loadBalancer :
+        servers :
+          - url : "http://192.168.1.33:3001/"
+    assomaker :
+        loadBalancer :
+            servers :
+              - url : "http://192.168.1.33:8080"
+
+  routers :
+    website24 :
+      rule : "Host(`website24.revol.site`)"
+      service : "website24"
+      tls : 
+        certResolver : le
+
+    assomaker :
+      rule : "Host(`assomaker.revol.site`)"
+      service : "assomaker"
+      tls :
+        certResolver : le
+
