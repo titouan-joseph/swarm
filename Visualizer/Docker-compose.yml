@@ -1,0 +1,25 @@
+version: "3"
+
+services: 
+  viz:
+    image:  alexellis2/visualizer-arm:latest
+    deploy :
+      placement:
+          constraints:
+          - node.role==manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.viz.tls=true"
+        - "traefik.http.routers.viz.rule=Host(`viz.cluster.revol.site`)"
+        - "traefik.http.routers.viz.tls.certresolver=le"
+        - "traefik.http.routers.viz.entrypoints=websecure"
+        - "traefik.http.services.viz.loadbalancer.server.port=8080"
+
+    volumes :
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+    - traefik-public
+
+networks:
+  traefik-public:
+    external: true
