@@ -1,0 +1,53 @@
+body
+{
+    margin: 0;
+    padding: 0;
+    background-color: #222C3C;
+    font-family: 'Courier New';
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.main
+{
+    margin: 0;
+    height: 100%;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.txt
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.main h1
+{
+    font-size: 5em;
+    margin: 0;
+    text-align: center;
+}
+
+.main h2
+{
+    font-size: 2em;
+    margin: 0;
+    text-align: center;
+}
+
+.main p
+{
+ font-size: 1em;
+}
+
+.main img
+{
+    border-radius: 20px;
+}

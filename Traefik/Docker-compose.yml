@@ -10,7 +10,7 @@ services:
       - "--providers.docker.swarmMode=true"
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=traefik-public"
-      # Nas config
+      # Additional config with files
       - "--providers.file=true"
       - "--providers.file.directory=/services"
       - "--providers.file.watch=true"
@@ -62,7 +62,34 @@ services:
         - "traefik.http.routers.traefik.service=api@internal"
         - "traefik.http.routers.traefik.middlewares=traefik-auth"
         - "traefik.http.middlewares.traefik-auth.basicauth.usersfile=/passwd"
-    
+
+  errorprovider:
+    image: nginx:alpine
+    volumes: 
+      - ${PWD}/ErrorPages/pages/:/usr/share/nginx/html/
+      - ${PWD}/ErrorPages/default.conf:/etc/nginx/conf.d/default.conf
+    networks: 
+      - traefik-public
+    ports: 
+      - 6789:80
+    deploy:
+      restart_policy :
+        condition : on-failure
+      labels: 
+        - "traefik.enable=true"
+
+        - "traefik.http.routers.errorprovider.rule=HostRegexp(`{catchall:.+}`)"
+        - "traefik.http.routers.errorprovider.priority=10"
+        - "traefik.http.routers.errorprovider.entrypoints=websecure"
+        - "traefik.http.routers.errorprovider.middlewares=errorprovider"
+        - "traefik.http.routers.errorprovider.tls.certresolver=le"
+
+        - "traefik.http.services.errorprovider.loadbalancer.server.port=80"
+
+        - "traefik.http.middlewares.errorprovider.errors.status=400-600"
+        - "traefik.http.middlewares.errorprovider.errors.service=errorprovider"
+        - "traefik.http.middlewares.errorprovider.errors.query=/{status}.html"
+   
 networks:
   traefik-public:
     external: true
