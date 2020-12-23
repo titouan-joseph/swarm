@@ -4,6 +4,8 @@ services:
   viz:
     image:  alexellis2/visualizer-arm:latest
     deploy :
+      restart_policy:
+        condition: on-failure
       placement:
           constraints:
           - node.role==manager

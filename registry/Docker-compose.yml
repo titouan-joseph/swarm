@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  registryServer:
+    image: registry:2.7
+    volumes:
+      - ./data:/var/lib/registry
+    ports:
+      - 5000:5000
+    networks:
+      - traefik-public
+      - registry-net
+    deploy:
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.registryServer.entrypoints=websecure"
+        - "traefik.http.routers.registryServer.rule=Host(`dockerregistry.revol.site`)"
+        - "traefik.http.routers.registryServer.tls=true"
+        - "traefik.http.routers.registryServer.tls.certresolver=le"
+        - "traefik.http.services.registryServer.loadbalancer.server.port=5000"
+
+  registryFront:
+    image: joxit/docker-registry-ui:main-static
+    deploy:
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.registryFront.entrypoints=websecure"
+        - "traefik.http.routers.registryFront.rule=Host(`ui.dockerregistry.revol.site`)"
+        - "traefik.http.routers.registryFront.tls=true"
+        - "traefik.http.routers.registryFront.tls.certresolver=le"
+        - "traefik.http.services.registryFront.loadbalancer.server.port=80"
+    depends_on:
+      - registryServer
+    environment:
+      - REGISTRY_TITLE=Private Docker Registry
+      - REGISTRY_URL=http://registryServer:5000
+      - DELETE_IMAGES=true
+    networks:
+      - registry-net
+      - traefik-public
+
+networks:
+  registry-net:
+  traefik-public:
+    external: true
