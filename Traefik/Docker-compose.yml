@@ -18,7 +18,7 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       # SSL
-      - "--certificatesresolvers.le.acme.email=root@revol.site"
+      - "--certificatesresolvers.le.acme.email=root@cicorella.net"
       - "--certificatesresolvers.le.acme.storage=/acme.json"
       - "--certificatesResolvers.le.acme.tlsChallenge=true"
       - "--certificatesResolvers.le.acme.httpChallenge=true"
@@ -56,7 +56,7 @@ services:
         - "traefik.docker.network=traefik-public"
         - "traefik.http.routers.traefik.tls=true"
         - "traefik.http.services.traefik.loadbalancer.server.port=888" # required by swarm but not used.
-        - "traefik.http.routers.traefik.rule=Host(`traefik.cluster.revol.site`)"
+        - "traefik.http.routers.traefik.rule=Host(`traefik.cluster.cicorella.net`)"
         - "traefik.http.routers.traefik.tls.certresolver=le"
         - "traefik.http.routers.traefik.entrypoints=websecure"
         - "traefik.http.routers.traefik.service=api@internal"

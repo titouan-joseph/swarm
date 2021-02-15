@@ -16,7 +16,7 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.registryServer.entrypoints=websecure"
-        - "traefik.http.routers.registryServer.rule=Host(`dockerregistry.revol.site`)"
+        - "traefik.http.routers.registryServer.rule=Host(`dockerregistry.cicorella.net`)"
         - "traefik.http.routers.registryServer.tls=true"
         - "traefik.http.routers.registryServer.tls.certresolver=le"
         - "traefik.http.services.registryServer.loadbalancer.server.port=5000"
@@ -29,7 +29,7 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.registryFront.entrypoints=websecure"
-        - "traefik.http.routers.registryFront.rule=Host(`ui.dockerregistry.revol.site`)"
+        - "traefik.http.routers.registryFront.rule=Host(`ui.dockerregistry.cicorella.net`)"
         - "traefik.http.routers.registryFront.tls=true"
         - "traefik.http.routers.registryFront.tls.certresolver=le"
         - "traefik.http.services.registryFront.loadbalancer.server.port=80"

@@ -9,7 +9,7 @@ tcp :
     nas :
       entryPoints : 
         - "websecure"
-      rule : "HostSNI(`telechargement.revol.site`) || HostSNI(`audio.revol.site`) || HostSNI(`nas.revol.site`) || HostSNI(`video.revol.site`) || HostSNI(`drive.revol.site`) || HostSNI(`photo.revol.site`) || HostSNI(`file.revol.site`)"
+      rule : "HostSNI(`telechargement.cicorella.net`) || HostSNI(`audio.cicorella.net`) || HostSNI(`nas.cicorella.net`) || HostSNI(`video.cicorella.net`) || HostSNI(`drive.cicorella.net`) || HostSNI(`photo.cicorella.net`) || HostSNI(`file.cicorella.net`)"
       service : nas
       tls:
         passthrough: true

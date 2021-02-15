@@ -12,7 +12,7 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.viz.tls=true"
-        - "traefik.http.routers.viz.rule=Host(`viz.cluster.revol.site`)"
+        - "traefik.http.routers.viz.rule=Host(`viz.cluster.cicorella.net`)"
         - "traefik.http.routers.viz.tls.certresolver=le"
         - "traefik.http.routers.viz.entrypoints=websecure"
         - "traefik.http.services.viz.loadbalancer.server.port=8080"
