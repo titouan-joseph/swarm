@@ -28,5 +28,5 @@ volumes:
     driver_opts:
       type: cifs    
       device: //192.168.100.250/services/swarmTest/neonlink/data
-      o: "username=docker,password=SwarmCluster123456,vers=3.0,uid=1000,gid=1000,mfsymlinks,nobrl"
+      o: "username=${CIFS_USER},password=${CIFS_PASSWORD},vers=3.0,uid=1000,gid=1000,mfsymlinks,nobrl"
 

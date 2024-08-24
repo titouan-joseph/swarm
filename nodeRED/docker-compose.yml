@@ -1,9 +1,9 @@
-version: '3'
+version: "3"
 
 services:
   nodered:
     image: nodered/node-red:latest-minimal
-    deploy :
+    deploy:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.nodered.tls=true"
@@ -18,8 +18,7 @@ services:
     volumes:
       - cifs_mount:/data
         #    entrypoint: /bin/ping
-        #    command: localhost 
-
+        #    command: localhost
 
 networks:
   traefik-public:
@@ -28,7 +27,6 @@ volumes:
   cifs_mount:
     driver: local
     driver_opts:
-      type: cifs    
+      type: cifs
       device: //192.168.100.250/services/swarmTest/nodered/data
-      o: "username=docker,password=SwarmCluster123456,vers=3.0,uid=1000,gid=1000,mfsymlinks"
-
+      o: "username=${CIFS_USER},password=${CIFS_PASSWORD},vers=3.0,uid=1000,gid=1000,mfsymlinks"

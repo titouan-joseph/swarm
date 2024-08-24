@@ -1,2 +1,9 @@
-# swarmTest
-Somme tests with docker swarm 
+# swarm
+
+Cluster docker swarm
+
+Pour lancer les stack utiliser la commande suivante :
+
+```bash
+eval $(< .env) docker stack deploy --compose-file docker-compose.yml stack-name
+```

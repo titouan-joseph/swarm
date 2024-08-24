@@ -1,9 +1,9 @@
-version: '3'
+version: "3"
 
 services:
   minio:
     image: quay.io/minio/minio
-    deploy :
+    deploy:
       labels:
         - "traefik.enable=true"
         - "traefik.http.middlewares.minio-gzip.compress=true"
@@ -31,7 +31,7 @@ services:
       - MINIO_ROOT_USER=${NINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - MINIO_DOMAIN=minio.cluster.cicorella.net
-      - MINIO_SERVER_URL=https://minio.cluster.cicorella.net 
+      - MINIO_SERVER_URL=https://minio.cluster.cicorella.net
       - MINIO_BROWSER=on
       - MINIO_BROWSER_REDIRECT_URL=https://minio-admin.cluster.cicorella.net
     command: minio server /data --console-address 0.0.0.0:9001
@@ -40,7 +40,6 @@ services:
     volumes:
       - cifs_mount:/data
 
-
 networks:
   traefik-public:
     external: true
@@ -48,8 +47,6 @@ volumes:
   cifs_mount:
     driver: local
     driver_opts:
-      type: cifs    
+      type: cifs
       device: //192.168.100.250/services/swarmTest/minio/data
-      o: "username=docker,password=SwarmCluster123456,vers=3.0,uid=1000,gid=1000,mfsymlinks"
-
-
+      o: "username=${CIFS_USER},password=${CIFS_PASSWORD},vers=3.0,uid=1000,gid=1000,mfsymlinks"
