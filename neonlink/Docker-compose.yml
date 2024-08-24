@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  neonlink:
+    image: alexscifier/neonlink:v1.4.16
+    # image : dockerregistry.cicorella.net/neonlink
+    deploy :
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.neonlink.tls=true"
+        - "traefik.http.routers.neonlink.rule=Host(`neonlink.cluster.cicorella.net`)"
+        - "traefik.http.routers.neonlink.tls.certresolver=le"
+        - "traefik.http.routers.neonlink.entrypoints=websecure"
+        - "traefik.http.services.neonlink.loadbalancer.server.port=3333"
+    environment:
+      - TZ=Europe/Paris
+    networks:
+      - traefik-public
+    volumes:
+      - cifs_mount:/app/data
+
+networks:
+  traefik-public:
+    external: true
+volumes:
+  cifs_mount:
+    driver: local
+    driver_opts:
+      type: cifs    
+      device: //192.168.100.250/services/swarmTest/neonlink/data
+      o: "username=docker,password=SwarmCluster123456,vers=3.0,uid=1000,gid=1000,mfsymlinks,nobrl"
+
