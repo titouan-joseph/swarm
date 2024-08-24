@@ -2,7 +2,7 @@ version: '3'
 
 services:
   traefik:
-    image: traefik:v2.2
+    image: traefik:v2.11
     command:
       # Docker config
       - "--providers.docker=true"
@@ -17,6 +17,7 @@ services:
       # Entrypoint
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
+      # - "--entrypoints.ssh.address=:2222"
       # SSL
       - "--certificatesresolvers.le.acme.email=root@cicorella.net"
       - "--certificatesresolvers.le.acme.storage=/acme.json"
@@ -36,6 +37,7 @@ services:
     ports:
       - 80:80
       - 443:443
+      # - 2222:2222
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./services:/services
@@ -93,3 +95,4 @@ services:
 networks:
   traefik-public:
     external: true
+

@@ -1,5 +1,7 @@
 acme.json
 accesslog.log
+accesslog.log.*
 log.log
 .env
 passwd
+*.old
