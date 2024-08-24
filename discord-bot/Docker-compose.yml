@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  ginnybot:
+    image: dockerregistry.cicorella.net/ginnybot
+    deploy:
+      restart_policy:
+        condition : on-failure
+    environment:
+      BOT_TOKEN: ${GINNY_BOT_TOKEN}
+      GOOGLE_APPLICATION_CREDENTIALS_JSON: ${GINNY_GOOGLE_APPLICATION_CREDENTIALS_JSON}
+  
+  astusbot:
+    image: dockerregistry.cicorella.net/astusbot
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      BOT_TOKEN: ${ASTUS_BOT_TOKEN}
+      GOOGLE_APPLICATION_CREDENTIALS_JSON: ${ASTUS_GOOGLE_APPLICATION_CREDENTIALS_JSON}
+      
+  botzach:
+    image: dockerregistry.cicorella.net/bot_discord
+    deploy:
+      restart_policy:
+        condition : on-failure
+    environment:
+      BOT_TOKEN: ${ZACH_BOT_TOKEN}
+
+  machineacafe:
+    image: dockerregistry.cicorella.net/machineacafe
+    deploy:
+      restart_policy:
+        condition : on-failure
+    environment:
+      DISCORD_TOKEN: ${MACHINE_A_CAFF_BOT_TOKEN}
+    volumes:
+      - machineacafe_cifs_mount:/bot/database
+
+volumes:
+  machineacafe_cifs_mount:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: //192.168.100.250/services/machineACafe/deploy
+      o: "username=${CIFS_USER},password=${CIFS_PASSWORD},vers=3.0,uid=1000,gid=1000,mfsymlinks"
