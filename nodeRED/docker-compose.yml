@@ -17,8 +17,6 @@ services:
       - traefik-public
     volumes:
       - cifs_mount:/data
-        #    entrypoint: /bin/ping
-        #    command: localhost
 
 networks:
   traefik-public:

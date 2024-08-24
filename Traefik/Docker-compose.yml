@@ -37,7 +37,6 @@ services:
     ports:
       - 80:80
       - 443:443
-      # - 2222:2222
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./services:/services
@@ -72,8 +71,6 @@ services:
       - ./ErrorPages/default.conf:/etc/nginx/conf.d/default.conf
     networks: 
       - traefik-public
-    ports: 
-      - 6789:80
     deploy:
       restart_policy :
         condition : on-failure

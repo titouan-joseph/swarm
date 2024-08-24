@@ -4,9 +4,7 @@ services:
   registryServer:
     image: registry:2.7
     volumes:
-      - ./data:/var/lib/registry
-    ports:
-      - 5000:5000
+      - cifs_mount:/var/lib/registry
     networks:
       - traefik-public
       - registry-net
@@ -47,3 +45,11 @@ networks:
   registry-net:
   traefik-public:
     external: true
+
+volumes:
+  cifs_mount:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: //192.168.100.250/services/swarmTest/registry/data
+      o: "username=${CIFS_USER},password=${CIFS_PASSWORD},vers=3.0,uid=1000,gid=1000,mfsymlinks"
