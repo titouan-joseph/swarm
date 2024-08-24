@@ -1,0 +1,14 @@
+tcp:
+  routers:
+    captain:
+      entryPoints:
+        - websecure
+      service: captain
+      tls:
+        certResolver: le
+      rule: HostSNI(`captain.cluster.cicorella.net`)
+  services:
+    captain:
+      loadBalancer:
+        servers:
+          - address: 192.168.100.203:22

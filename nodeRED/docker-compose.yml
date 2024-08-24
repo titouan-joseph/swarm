@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  nodered:
+    image: nodered/node-red:latest-minimal
+    deploy :
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.nodered.tls=true"
+        - "traefik.http.routers.nodered.rule=Host(`nodered.cluster.cicorella.net`)"
+        - "traefik.http.routers.nodered.tls.certresolver=le"
+        - "traefik.http.routers.nodered.entrypoints=websecure"
+        - "traefik.http.services.nodered.loadbalancer.server.port=1880"
+    environment:
+      - TZ=Europe/Paris
+    networks:
+      - traefik-public
+    volumes:
+      - cifs_mount:/data
+        #    entrypoint: /bin/ping
+        #    command: localhost 
+
+
+networks:
+  traefik-public:
+    external: true
+volumes:
+  cifs_mount:
+    driver: local
+    driver_opts:
+      type: cifs    
+      device: //192.168.100.250/services/swarmTest/nodered/data
+      o: "username=docker,password=SwarmCluster123456,vers=3.0,uid=1000,gid=1000,mfsymlinks"
+

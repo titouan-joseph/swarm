@@ -1,0 +1,22 @@
+http :
+  serversTransports:
+    noSslVerify:
+      insecureSkipVerify: true
+  services :
+    nas-webdav :
+      loadBalancer :
+        serversTransport: noSslVerify
+        servers :
+           - url : "https://192.168.100.250:5006"
+
+  routers :
+    nas-webdav :
+      entryPoints : 
+        - "websecure"
+        - "web"
+      rule : "Host(`nas-webdav.cicorella.net`)"
+      service : nas-webdav
+      tls:
+        certResolver: le
+
+
